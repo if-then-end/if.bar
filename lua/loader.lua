@@ -9,7 +9,7 @@ local function add_spacer(position, width)
     position = position,
     width = width,
   })
-  return name
+  return { name = name, width = width }
 end
 
 local function load_group(cfg, names, position)
@@ -35,7 +35,7 @@ local function load_group(cfg, names, position)
     end
 
     common.reset()
-    local ok, drawn = pcall(entry.draw, cfg, position, nil)
+    local ok, drawn = pcall(entry.draw, cfg, position, spacer)
     local created = common.collect()
 
     if not ok then
@@ -47,7 +47,7 @@ local function load_group(cfg, names, position)
       groups[#groups + 1] = { widget = entry.name, items = created }
       spacer = nil
     elseif spacer then
-      sbar.remove(spacer)
+      sbar.remove(spacer.name)
       spacer = nil
     end
   end

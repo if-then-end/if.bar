@@ -70,4 +70,11 @@ function M.add_icon(cfg, name, position, glyph, props)
   return sbar.add("item", name, base)
 end
 
+function M.set_group_visible(group, spacer, visible)
+  sbar.set(group, { background = { drawing = visible } })
+  if spacer then
+    sbar.set(spacer.name, { width = visible and spacer.width or 0 })
+  end
+end
+
 return M

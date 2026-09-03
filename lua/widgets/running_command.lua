@@ -15,7 +15,7 @@ local function truncate(text, limit)
   return text:sub(1, utf8.offset(text, limit + 1) - 1) .. "…"
 end
 
-return function(cfg, position)
+return function(cfg, position, spacer)
   local limit = cfg.widget.last_command_max_length
 
   local color = {
@@ -103,7 +103,7 @@ return function(cfg, position)
 
     local group = any_shown()
     if group_shown ~= group then
-      sbar.set("group_running_command", { background = { drawing = group } })
+      common.set_group_visible("group_running_command", spacer, group)
       group_shown = group
     end
 

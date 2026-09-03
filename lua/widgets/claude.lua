@@ -45,7 +45,7 @@ local function read_sessions()
   return sessions
 end
 
-return function(cfg, position)
+return function(cfg, position, spacer)
   local MAX_SLOTS = cfg.widget.claude_max_sessions
   local slots = {}
 
@@ -83,7 +83,7 @@ return function(cfg, position)
   local function paint(pulse)
     local shown = #current > 0
     if group_shown ~= shown then
-      sbar.set("group_claude", { background = { drawing = shown } })
+      common.set_group_visible("group_claude", spacer, shown)
       group_shown = shown
     end
 
