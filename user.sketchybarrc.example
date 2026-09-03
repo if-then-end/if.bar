@@ -1,0 +1,89 @@
+#!/usr/bin/env bash
+
+# Copy this file to user.sketchybarrc and uncomment what you want to change:
+#
+#   cp user.sketchybarrc.example user.sketchybarrc
+#
+# Anything left commented out falls back to the defaults in lua/config.lua.
+# The file is parsed, not executed, so only "export NAME=value" lines count.
+# $COLOR_* names are resolved against the active theme: every base color has
+# COLOR_<NAME> plus COLOR_<NAME>_75, _50 and _25 alpha variants. A name the
+# theme does not define resolves to nothing, which leaves the widget colorless.
+
+# ========== Theme ==========
+# ayudark ayulight blossomlight githubdark githublight gruvboxdark
+# gruvboxlight nord onedark onelight tokyonight
+# export SBAR_THEME="onedark"
+
+# ========== Bar ==========
+# export SBAR_BAR_HEIGHT=56
+# export SBAR_BAR_POSITION="top"
+# export SBAR_BAR_BACKGROUND="transparent"
+
+# ========== Fonts ==========
+# export SBAR_LABEL_FONT_FAMILY="SpaceMono Nerd Font Mono"
+# export SBAR_ICON_FONT_FAMILY="SpaceMono Nerd Font Mono"
+# export SBAR_LABEL_FONT_SIZE=12
+# export SBAR_ICON_FONT_SIZE=18
+# export SBAR_APP_ICON_FONT_SIZE=13.5
+
+# ========== Widgets ==========
+# Space-separated lists, in display order.
+# Available: space front_app clock calendar weather caffeinate volume
+#            battery disk ram cpu netstat kakaotalk
+#            last_command running_command claude
+# export SBAR_WIDGETS_LEFT_ENABLED="space"
+# export SBAR_WIDGETS_CENTER_ENABLED="front_app"
+# export SBAR_WIDGETS_RIGHT_ENABLED="clock weather caffeinate volume battery disk ram cpu kakaotalk"
+
+# ========== Widget options ==========
+# export SBAR_CLOCK_FORMAT="MM/DD HH:mm"
+# export SBAR_CALENDAR_FORMAT="YYYY-MM-DD"
+# export SBAR_WEATHER_LOCATION="Seoul"
+# export SBAR_FRONT_APP_VISIBLE=true
+# export SBAR_CPU_SHOW_GRAPH=true
+# export SBAR_CPU_SHOW_PERCENT=true
+# export SBAR_RAM_SHOW_GRAPH=true
+# export SBAR_RAM_SHOW_PERCENT=true
+# export SBAR_NETSTAT_SHOW_GRAPH=true
+# export SBAR_NETSTAT_SHOW_SPEED=false
+
+# ========== Shell command widgets ==========
+# last_command and running_command put the commands you run on screen.
+# Read the security note in the README before enabling them on a machine you
+# share or present from. Both need the zsh hook.
+# export SBAR_LAST_COMMAND_MAX_LENGTH=60
+# export SBAR_RUNNING_DELAY=2
+
+# ========== Claude sessions ==========
+# Needs the Claude Code hooks; see README.
+# export SBAR_CLAUDE_MAX_SESSIONS=8
+
+# ========== Update frequency (seconds) ==========
+# export SBAR_ITEM_UPDATE_FREQ_FAST=2
+# export SBAR_ITEM_UPDATE_FREQ_DEFAULT=10
+# export SBAR_ITEM_UPDATE_FREQ_SLOW=30
+
+# ========== Spacing ==========
+# export SBAR_SPACER_WIDTH=8
+# export SBAR_GROUP_GAP=20
+
+# ========== Colors ==========
+# export SBAR_COLOR_CLOCK="$COLOR_YELLOW"
+# export SBAR_COLOR_CALENDAR="$COLOR_TANGERINE"
+# export SBAR_COLOR_WEATHER="$COLOR_CYAN"
+# export SBAR_COLOR_CAFFEINATE="$COLOR_GREEN"
+# export SBAR_COLOR_CAFFEINATE_ON="$COLOR_YELLOW"
+# export SBAR_COLOR_VOLUME="$COLOR_BLUE"
+# export SBAR_COLOR_BATTERY="$COLOR_ORANGE"
+# export SBAR_COLOR_DISK="$COLOR_RED"
+# export SBAR_COLOR_RAM="$COLOR_MAGENTA"
+# export SBAR_COLOR_CPU="$COLOR_BLUE"
+# export SBAR_COLOR_NETSTAT="$COLOR_TANGERINE"
+# export SBAR_COLOR_KAKAOTALK="$COLOR_YELLOW"
+# export SBAR_COLOR_FRONT_APP="$COLOR_GREEN"
+# export SBAR_COLOR_LAST_COMMAND="$COLOR_CYAN"
+# export SBAR_COLOR_LAST_COMMAND_ERROR="$COLOR_RED"
+# export SBAR_COLOR_LAST_COMMAND_CLAUDE="$COLOR_MAGENTA"
+# export SBAR_COLOR_RUNNING_COMMAND="$COLOR_YELLOW"
+# export SBAR_COLOR_RUNNING_COMMAND_CLAUDE="$COLOR_MAGENTA"

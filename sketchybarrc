@@ -1,0 +1,41 @@
+#!/usr/bin/env lua
+
+local function own_pid()
+  local handle = io.popen("echo $PPID")
+  if not handle then
+    return nil
+  end
+  local pid = handle:read("l")
+  handle:close()
+  if pid and pid:match("^%d+$") then
+    return pid
+  end
+  return nil
+end
+
+local function stop_others(self_pid)
+  if not self_pid then
+    return
+  end
+  os.execute(
+    "for p in $(pgrep -f '[l]ua .*/sketchybarrc' 2>/dev/null); do "
+      .. '[ "$p" != "' .. self_pid .. '" ] && kill "$p" 2>/dev/null; '
+      .. "done"
+  )
+end
+
+stop_others(own_pid())
+
+package.cpath = package.cpath .. ";" .. os.getenv("HOME") .. "/.local/share/sketchybar_lua/?.so"
+
+local config_dir = os.getenv("CONFIG_DIR") or (os.getenv("HOME") .. "/.config/sketchybar")
+package.path = config_dir .. "/lua/?.lua;" .. config_dir .. "/lua/?/init.lua;" .. package.path
+
+sbar = require("sketchybar")
+
+sbar.begin_config()
+require("init")
+sbar.hotload(true)
+sbar.end_config()
+
+sbar.event_loop()

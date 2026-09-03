@@ -1,0 +1,20 @@
+return {
+  type = "dark",
+  transparent = "0x00ffffff",
+  light_gray = "0xFF787c99",
+  dark_gray = "0xFF292e42",
+  bg1 = "0xFF1a1b26",
+  bg2 = "0xFF16161e",
+  base = {
+    white = "0xFFa9b1d6",
+    black = "0xFF16161e",
+    red = "0xFFf7768e",
+    yellow = "0xFFe0af68",
+    blue = "0xFF7aa2f7",
+    green = "0xFF9ece6a",
+    magenta = "0xFFbb9af7",
+    cyan = "0xFF7dcfff",
+    orange = "0xFFff9e64",
+    tangerine = "0xFFff9e64",
+  },
+}

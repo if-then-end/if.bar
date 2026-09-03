@@ -1,0 +1,26 @@
+return {
+  exact = {
+    ["weather_clear_day"] = "",
+    ["weather_clear_night"] = "",
+    ["weather_partly_cloudy_day"] = "",
+    ["weather_partly_cloudy_night"] = "",
+    ["weather_cloudy_day"] = "",
+    ["weather_cloudy_night"] = "",
+    ["weather_fog_day"] = "",
+    ["weather_fog_night"] = "",
+    ["weather_rain_day"] = "",
+    ["weather_rain_night"] = "",
+    ["weather_snow_day"] = "",
+    ["weather_snow_night"] = "",
+    ["weather_hail_day"] = "",
+    ["weather_hail_night"] = "",
+    ["weather_sleet_day"] = "",
+    ["weather_sleet_night"] = "",
+    ["weather_thunderstorm_day"] = "",
+    ["weather_thunderstorm_night"] = "",
+    ["weather_default"] = "",
+  },
+  prefix = {
+  },
+  default = "",
+}
