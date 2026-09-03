@@ -72,16 +72,18 @@ cp ifbarrc.example ifbarrc
 listed and commented in `ifbarrc.example`; anything you leave out falls back to
 the defaults in `lua/config.lua`. Reload with `sketchybar --reload`.
 
-The older name `user.sketchybarrc` is still read when `ifbarrc` is absent.
+Settings are named `IF_BAR_*`. The older `user.sketchybarrc` file and the
+`SBAR_*` prefix are both still accepted, so an existing setup keeps working;
+the new names win where a file has both.
 
 ### Widgets
 
 Three space-separated lists, in display order:
 
 ```bash
-export SBAR_WIDGETS_LEFT_ENABLED="space claude running_command last_command"
-export SBAR_WIDGETS_CENTER_ENABLED="front_app"
-export SBAR_WIDGETS_RIGHT_ENABLED="clock weather caffeinate volume battery disk ram cpu"
+export IF_BAR_WIDGETS_LEFT_ENABLED="space claude running_command last_command"
+export IF_BAR_WIDGETS_CENTER_ENABLED="front_app"
+export IF_BAR_WIDGETS_RIGHT_ENABLED="clock weather caffeinate volume battery disk ram cpu"
 ```
 
 | Widget | Shows |
@@ -89,7 +91,7 @@ export SBAR_WIDGETS_RIGHT_ENABLED="clock weather caffeinate volume battery disk 
 | `space` | yabai spaces with the icons of the apps in them |
 | `front_app` | The focused application |
 | `clock`, `calendar` | Time and date, formats configurable |
-| `weather` | Current conditions for `SBAR_WEATHER_LOCATION` |
+| `weather` | Current conditions for `IF_BAR_WEATHER_LOCATION` |
 | `battery`, `disk`, `ram`, `cpu` | System status, with optional graphs |
 | `netstat` | Network throughput |
 | `volume` | Output volume; click to mute |
@@ -106,7 +108,7 @@ separated by a wider gap; the Claude group hides itself when no session is up.
 ### Themes
 
 ```bash
-export SBAR_THEME="nord"
+export IF_BAR_THEME="nord"
 ```
 
 Dark: `onedark` (default), `nord`, `tokyonight`, `githubdark`, `gruvboxdark`,
@@ -124,8 +126,8 @@ echo 'source "$ZDOTDIR/functions/sketchybar.zsh"' >> "$ZDOTDIR/.zshrc"
 ```
 
 A command that finishes quickly never reaches `running_command`; only one that
-outlives `SBAR_RUNNING_DELAY` (2s) does. `last_command` then shows it once it is
-done. Long commands are cut at `SBAR_LAST_COMMAND_MAX_LENGTH` characters —
+outlives `IF_BAR_RUNNING_DELAY` (2s) does. `last_command` then shows it once it is
+done. Long commands are cut at `IF_BAR_LAST_COMMAND_MAX_LENGTH` characters —
 characters, not bytes, so a Korean command is not cut mid-glyph.
 
 > **These widgets put your commands on screen.** The hook masks what looks like

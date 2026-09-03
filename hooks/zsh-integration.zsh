@@ -9,7 +9,7 @@ _sketchybar_bin() {
 }
 
 _SKETCHYBAR_BIN="$(_sketchybar_bin)"
-_SKETCHYBAR_RUNNING_DELAY=${SBAR_RUNNING_DELAY:-2}
+_SKETCHYBAR_RUNNING_DELAY=${IF_BAR_RUNNING_DELAY:-${SBAR_RUNNING_DELAY:-2}}
 _sketchybar_command=""
 _sketchybar_timer=""
 
