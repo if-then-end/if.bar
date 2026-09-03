@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-# Copy this file to user.sketchybarrc and uncomment what you want to change:
+# Copy this file to ifbarrc and uncomment what you want to change:
 #
-#   cp user.sketchybarrc.example user.sketchybarrc
+#   cp ifbarrc.example ifbarrc
 #
 # Anything left commented out falls back to the defaults in lua/config.lua.
 # The file is parsed, not executed, so only "export NAME=value" lines count.

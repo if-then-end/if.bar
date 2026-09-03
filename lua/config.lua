@@ -78,7 +78,10 @@ end
 
 function M.load()
   local config_dir = require("paths")
-  local raw = parse_user_config(config_dir .. "/user.sketchybarrc")
+  local raw = parse_user_config(config_dir .. "/ifbarrc")
+  if next(raw) == nil then
+    raw = parse_user_config(config_dir .. "/user.sketchybarrc")
+  end
 
   local theme = theme_loader.load(raw.SBAR_THEME)
   local c = theme.colors

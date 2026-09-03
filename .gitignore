@@ -3,4 +3,5 @@
 .omc/
 *.log
 *.tmp
+ifbarrc
 user.sketchybarrc
