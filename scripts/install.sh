@@ -86,21 +86,9 @@ if ! command -v pnpm &> /dev/null; then
     brew install pnpm
 fi
 
-TEMP_DIR=$(mktemp -d)
-cd "$TEMP_DIR"
-git clone https://github.com/kvndrsslr/sketchybar-app-font.git > /dev/null 2>&1
-cd sketchybar-app-font
-
-pnpm install > /dev/null 2>&1
-pnpm run build:install > /dev/null 2>&1
-
-mkdir -p "$CONFIG_DIR/lua/icons"
-awk -f "$CONFIG_DIR/scripts/icon_map_to_lua.awk" dist/icon_map.sh > "$CONFIG_DIR/lua/icons/apps.lua"
-cp dist/sketchybar-app-font.ttf "$HOME/Library/Fonts/"
-echo "Done"
-
-cd ~
-rm -rf "$TEMP_DIR"
+# The upstream build:install copies into a helpers/ directory this config does
+# not have and reloads a bar that is not running yet, so it cannot be used here.
+"$CONFIG_DIR/scripts/update-app-font.sh"
 echo ""
 
 echo "[5/6] Refreshing font cache..."
