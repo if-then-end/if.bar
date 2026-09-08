@@ -13,4 +13,5 @@ settings/
 # local app-font overrides
 app-font/svgs/*
 app-font/mappings/*
+app-font/*.local.md
 !app-font/*/.gitkeep

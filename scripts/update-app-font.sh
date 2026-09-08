@@ -48,7 +48,10 @@ recorded_commit() {
 # neither a note kept alongside nor moving the checkout forces a rebuild.
 overlay_digest() {
   local files
-  files="$(cd "$OVERLAY" 2> /dev/null && find svgs mappings -type f ! -name '.*' 2> /dev/null | sort)"
+  files="$(cd "$OVERLAY" 2> /dev/null \
+    && find svgs -type f -name '*.svg' 2> /dev/null \
+    && find mappings -type f ! -name '.*' ! -name '*.*' 2> /dev/null)"
+  files="$(printf '%s' "$files" | sort)"
   if [ -z "$files" ]; then
     echo "none"
     return
@@ -117,17 +120,20 @@ echo "  at $COMMIT ($COMMIT_DATE)"
 # Applied to the clone rather than kept as a patch, so an upstream refresh keeps
 # them: svgtofont names each glyph after its file, and an SVG with no mapping is
 # only an informational note to the upstream validator.
+# Only glyphs and mappings, never a note kept alongside them: the upstream
+# validator runs isSvg() over every file in svgs/ and exits on the first that
+# is not one.
 APPLIED=0
-for kind in svgs mappings; do
-  if [ -d "$OVERLAY/$kind" ] && [ -n "$(ls -A "$OVERLAY/$kind" 2> /dev/null)" ]; then
-    for f in "$OVERLAY/$kind"/*; do
-      [ -f "$f" ] || continue
-      cp "$f" "$TMP/font/$kind/$(basename "$f")"
-      echo "  override $kind/$(basename "$f")"
-      APPLIED=$((APPLIED + 1))
-    done
-  fi
-done
+while IFS= read -r rel; do
+  [ -n "$rel" ] || continue
+  cp "$OVERLAY/$rel" "$TMP/font/$rel"
+  echo "  override $rel"
+  APPLIED=$((APPLIED + 1))
+done <<EOF
+$(cd "$OVERLAY" 2> /dev/null \
+  && find svgs -type f -name '*.svg' 2> /dev/null \
+  && find mappings -type f ! -name '.*' ! -name '*.*' 2> /dev/null)
+EOF
 [ "$APPLIED" -gt 0 ] && echo "  $APPLIED local override(s) applied"
 
 echo "Building the font (this pulls the upstream dev dependencies)..."

@@ -31,5 +31,6 @@ shape, and a grid much wider than it is tall would fill only a fraction of the
 glyph box. A wide, flat glyph still reads smaller than a squarer one at the same
 point size - `IF_BAR_CLAUDE_ICON_SIZE` exists for exactly that.
 
-Notes for an override that lives here belong here too, since the override itself
-is not tracked.
+Notes for an override belong next to this file as `<name>.local.md`, not inside
+`svgs/`: the upstream validator runs `isSvg()` over everything in that directory
+and exits on the first file that is not one.
