@@ -53,7 +53,7 @@ return function(cfg, position, spacer)
     slots[index] = common.add_icon(cfg, "claude." .. index, position, icons.app("Claude"), {
       drawing = false,
       icon = {
-        font = cfg.font.app_icon .. ":Regular:" .. cfg.font.app_icon_size,
+        font = cfg.font.app_icon .. ":Regular:" .. cfg.font.claude_icon_size,
         padding_left = index == 1 and cfg.item.icon_padding_left or 2,
         padding_right = 2,
       },

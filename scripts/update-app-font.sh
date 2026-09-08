@@ -9,6 +9,10 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CONFIG_DIR="$(dirname "$SCRIPT_DIR")"
 
 AWK_SCRIPT="$SCRIPT_DIR/icon_map_to_lua.awk"
+OVERLAY="$CONFIG_DIR/app-font"
+# The digest of the last build's overrides. Runtime state, not repo content:
+# overrides are local, and the map they would otherwise stamp is committed.
+OVERLAY_STATE="$HOME/.local/state/if.bar/app-font-overlay"
 MAP="$CONFIG_DIR/lua/icons/apps.lua"
 FONT="$HOME/Library/Fonts/sketchybar-app-font.ttf"
 
@@ -35,9 +39,24 @@ keys_of() {
   grep -o '^[[:space:]]*\["[^"]*"\]' "$1" | sed 's/.*\["//; s/"\]$//' | sort
 }
 
-# The upstream commit the current map was built from, recorded in its header.
+# The upstream commit the map was built from, recorded in its first line.
 recorded_commit() {
-  sed -n '1s/^-- .*@//p' "$1"
+  sed -n '1s/.*font@\([0-9a-f]*\).*/\1/p' "$1"
+}
+
+# Only what reaches the font counts, and by path relative to the overlay, so
+# neither a note kept alongside nor moving the checkout forces a rebuild.
+overlay_digest() {
+  local files
+  files="$(cd "$OVERLAY" 2> /dev/null && find svgs mappings -type f ! -name '.*' 2> /dev/null | sort)"
+  if [ -z "$files" ]; then
+    echo "none"
+    return
+  fi
+  {
+    echo "$files"
+    printf '%s' "$files" | tr '\n' '\0' | (cd "$OVERLAY" && xargs -0 cat)
+  } | md5
 }
 
 [ -f "$AWK_SCRIPT" ] || die "generator not found: $AWK_SCRIPT"
@@ -45,10 +64,12 @@ recorded_commit() {
 command -v git > /dev/null || die "git is required"
 
 CURRENT="$(recorded_commit "$MAP")"
+OVERLAY_NOW="$(overlay_digest)"
 
 # A font build is not byte-reproducible, so being up to date is decided by the
 # upstream commit - and ls-remote answers that without cloning or building.
-if [ -z "$REF" ] && [ -n "$CURRENT" ] && [ -s "$FONT" ]; then
+if [ -z "$REF" ] && [ -n "$CURRENT" ] && [ -s "$FONT" ] \
+  && [ "$(cat "$OVERLAY_STATE" 2> /dev/null)" = "$OVERLAY_NOW" ]; then
   REMOTE="$(git ls-remote "$UPSTREAM" HEAD 2> /dev/null | cut -f1)"
   if [ -n "$REMOTE" ] && [ "$REMOTE" = "$CURRENT" ]; then
     echo "Already up to date ($(keys_of "$MAP" | wc -l | tr -d ' ') apps, upstream ${CURRENT:0:7})"
@@ -92,6 +113,22 @@ COMMIT_FULL="$(git -C "$TMP/font" rev-parse HEAD)"
 COMMIT="${COMMIT_FULL:0:7}"
 COMMIT_DATE="$(git -C "$TMP/font" log -1 --format=%cs)"
 echo "  at $COMMIT ($COMMIT_DATE)"
+
+# Applied to the clone rather than kept as a patch, so an upstream refresh keeps
+# them: svgtofont names each glyph after its file, and an SVG with no mapping is
+# only an informational note to the upstream validator.
+APPLIED=0
+for kind in svgs mappings; do
+  if [ -d "$OVERLAY/$kind" ] && [ -n "$(ls -A "$OVERLAY/$kind" 2> /dev/null)" ]; then
+    for f in "$OVERLAY/$kind"/*; do
+      [ -f "$f" ] || continue
+      cp "$f" "$TMP/font/$kind/$(basename "$f")"
+      echo "  override $kind/$(basename "$f")"
+      APPLIED=$((APPLIED + 1))
+    done
+  fi
+done
+[ "$APPLIED" -gt 0 ] && echo "  $APPLIED local override(s) applied"
 
 echo "Building the font (this pulls the upstream dev dependencies)..."
 if ! (cd "$TMP/font" && pnpm install && pnpm run build) > "$LOG" 2>&1; then
@@ -160,6 +197,8 @@ keys_of "$TMP/apps.lua" > "$TMP/new.keys"
 
 echo "Installing..."
 mv "$TMP/apps.lua" "$MAP"
+mkdir -p "$(dirname "$OVERLAY_STATE")"
+printf '%s\n' "$OVERLAY_NOW" > "$OVERLAY_STATE"
 mkdir -p "$(dirname "$FONT")"
 cp "$BUILT_FONT" "$FONT"
 

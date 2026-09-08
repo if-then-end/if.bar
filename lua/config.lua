@@ -138,6 +138,11 @@ function M.load()
       label_size = number(raw, "IF_BAR_LABEL_FONT_SIZE", 12.0),
       app_icon = pick(raw, "IF_BAR_APP_ICON_FONT", "sketchybar-app-font"),
       app_icon_size = number(raw, "IF_BAR_APP_ICON_FONT_SIZE", 13.5),
+      claude_icon_size = number(
+        raw,
+        "IF_BAR_CLAUDE_ICON_SIZE",
+        number(raw, "IF_BAR_APP_ICON_FONT_SIZE", 13.5)
+      ),
     },
 
     item = {

@@ -9,3 +9,8 @@ user.sketchybarrc
 # installed app binaries
 bin/
 settings/
+
+# local app-font overrides
+app-font/svgs/*
+app-font/mappings/*
+!app-font/*/.gitkeep
