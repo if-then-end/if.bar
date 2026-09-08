@@ -1,5 +1,6 @@
 local common = require("widgets.common")
 local icons = require("icons")
+local util = require("util")
 
 return function(cfg, position)
   local label = common.add_label(cfg, "weather.label", position, {
@@ -15,7 +16,7 @@ return function(cfg, position)
     },
   })
 
-  local url = "wttr.in/" .. cfg.widget.weather_location .. "?format=j1"
+  local url = "wttr.in/" .. util.url_encode(cfg.widget.weather_location) .. "?format=j1"
   local query = "curl -s '" .. url .. "' | jq -r '"
     .. "[.current_condition[0].temp_C, .current_condition[0].weatherCode,"
     .. " .weather[0].astronomy[0].sunrise, .weather[0].astronomy[0].sunset] | @tsv'"

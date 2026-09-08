@@ -49,6 +49,16 @@ function M.date_format(pattern)
   return (out:gsub("[\1-\12]", DATE_STRFTIME))
 end
 
+-- wttr.in reads the path as the location and gives +, @, ~ and , their own
+-- meaning, so those stay; everything else is encoded. That covers place names
+-- carrying an apostrophe - N'Djamena, Val-d'Or - which would otherwise close
+-- the quoting of the command the value is interpolated into.
+function M.url_encode(s)
+  return (tostring(s):gsub("[^%w%-%._~%+@,]", function(c)
+    return string.format("%%%02X", string.byte(c))
+  end))
+end
+
 function M.file_exists(path)
   local f = io.open(path, "r")
   if f then
