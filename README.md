@@ -2,10 +2,9 @@
 
 A Lua configuration for [sketchybar](https://github.com/FelixKratz/SketchyBar):
 app icons, system status, weather, the command your shell is running, and one
-indicator per live Claude Code session.
-
-It runs as a single resident Lua process talking to sketchybar over kernel IPC,
-so widgets update through event callbacks rather than by forking a shell.
+indicator per live Claude Code session. It runs as a single resident Lua process
+talking to sketchybar over kernel IPC, so widgets update through event callbacks
+rather than by forking a shell.
 
 ## Install
 
@@ -15,33 +14,26 @@ Needs macOS and [Homebrew](https://brew.sh); the script pulls everything else.
 curl -fsSL https://raw.githubusercontent.com/if-then-end/if.bar/main/scripts/install.sh | bash
 ```
 
-It clones this repo into `~/.config/sketchybar`, moving any existing config to
-`~/.config/sketchybar.backup.<timestamp>` first, then starts the bar.
+It clones this repo into `~/.config/sketchybar`, moving any existing config
+aside first, then starts the bar. Building the app icon font runs the upstream
+project's own install and build - pass a commit to `scripts/update-app-font.sh`
+to pin it.
 
-Installing the app icons builds that font from source, which runs the upstream
-project's own `pnpm install` and build script at whatever its default branch
-points to - pass a commit to `scripts/update-app-font.sh` to pin it.
+[yabai](https://github.com/koekeishiya/yabai) is optional, and only the `space`
+widget needs it.
 
 <details>
 <summary>Manual install</summary>
 
 ```bash
 brew tap FelixKratz/formulae
-brew install sketchybar jq lua
+brew install sketchybar jq lua pnpm
 brew install --cask font-space-mono-nerd-font
 
 git clone https://github.com/FelixKratz/SbarLua.git /tmp/SbarLua \
   && (cd /tmp/SbarLua && make install) && rm -rf /tmp/SbarLua
 
 git clone https://github.com/if-then-end/if.bar ~/.config/sketchybar
-```
-
-App icons come from
-[sketchybar-app-font](https://github.com/kvndrsslr/sketchybar-app-font). One
-script builds it and converts its icon list into the Lua table this config
-reads:
-
-```bash
 ~/.config/sketchybar/scripts/update-app-font.sh
 
 brew services restart sketchybar
@@ -49,25 +41,17 @@ brew services restart sketchybar
 
 </details>
 
-[yabai](https://github.com/koekeishiya/yabai) is optional, and only the `space`
-widget needs it.
-
 ## Configuration
 
 ```bash
 cd ~/.config/sketchybar && cp ifbarrc.example ifbarrc
 ```
 
-Every setting is listed and commented there. `ifbarrc` is parsed, not executed:
-only `export NAME=value` lines count, and `$COLOR_*` resolves against the active
-theme. Reload with `sketchybar --reload`.
+Every setting is listed and commented there. The file is parsed rather than
+executed, so only `export NAME=value` lines count. Reload with
+`sketchybar --reload`.
 
-Settings are named `IF_BAR_*`. The older `user.sketchybarrc` file and `SBAR_*`
-prefix still work, and the new names win where both appear.
-
-### Widgets
-
-Three space-separated lists, in display order:
+Widgets are three space-separated lists, in display order:
 
 ```bash
 export IF_BAR_WIDGETS_LEFT_ENABLED="space claude running_command last_command"
@@ -79,17 +63,11 @@ export IF_BAR_WIDGETS_RIGHT_ENABLED="clock weather caffeinate volume battery dis
 `weather` · `battery` · `disk` · `ram` · `cpu` · `netstat` · `volume` ·
 `caffeinate` · `kakaotalk` · `last_command` · `running_command` · `claude`
 
-Each list shares a rounded background. Spaces and the Claude icons stand alone
-in their own, and the Claude group hides itself when no session is running.
-
-### Themes
+Eleven themes ship with it, `onedark` by default:
 
 ```bash
 export IF_BAR_THEME="nord"
 ```
-
-`onedark` (default), `nord`, `tokyonight`, `githubdark`, `gruvboxdark`,
-`ayudark`, `onelight`, `githublight`, `gruvboxlight`, `blossomlight`, `ayulight`.
 
 ## Shell integration
 
@@ -101,14 +79,11 @@ ln -sf ~/.config/sketchybar/hooks/zsh-integration.zsh "$ZDOTDIR/functions/sketch
 echo 'source "$ZDOTDIR/functions/sketchybar.zsh"' >> "$ZDOTDIR/.zshrc"
 ```
 
-A command reaches `running_command` only if it outlives `IF_BAR_RUNNING_DELAY`
-(2s, exported from your `.zshrc`), and moves to `last_command` when it ends.
-
 > **These widgets put your commands on screen.** The hook masks what looks like
-> a secret — `password`, `token`, `authorization`, `bearer`, credentials in a
-> URL, a password glued to `-p`, and similar — but it matches on keywords and is
-> best effort, not a guarantee. Whatever gets through is visible to screen
-> shares and screenshots. Leave both widgets out if that is not a trade you want.
+> a secret - `password`, `token`, `bearer`, credentials in a URL and similar -
+> but it matches on keywords and is best effort, not a guarantee. Whatever gets
+> through is visible to screen shares and screenshots. Leave both widgets out if
+> that is not a trade you want.
 
 ## Claude Code integration
 
@@ -126,11 +101,9 @@ In `~/.claude/settings.json`, add
 `PostToolUse` with a `Bash` matcher. Those arrays take more than one entry.
 
 Each session gets a color, dimmed when idle, pulsing while Claude works, and
-bright and steady when it is blocked on your answer. Commands Claude runs get
-their own slot in `running_command`, so they never push out one of yours.
-
-Both hooks swallow every error and exit 0, so a broken bar cannot disturb a
-session. State lives in `~/.local/state/if.bar/`, created owner-only.
+bright and steady when it is blocked on your answer. Both hooks swallow every
+error and exit 0, so a broken bar cannot disturb a session, and the session ids
+they track live in `~/.local/state/if.bar/`, created owner-only.
 
 ## Troubleshooting
 
@@ -141,10 +114,8 @@ session. State lives in `~/.local/state/if.bar/`, created owner-only.
 | Weather is blank    | `curl -s "wttr.in/Seoul?format=j1"`                        |
 | Bar does not start  | `lua ~/.config/sketchybar/sketchybarrc` shows the error    |
 
-Update with `~/.config/sketchybar/scripts/update.sh`. The app icons live in a
-separate font that a pull does not carry, so refresh them with
-`~/.config/sketchybar/scripts/update-app-font.sh` - it reports which apps came
-and went, and answers in about a second when there is nothing to do.
+Update with `scripts/update.sh`. App icons come from a separate font that a pull
+does not carry, so refresh those with `scripts/update-app-font.sh`.
 
 ## Credits
 
