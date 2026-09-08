@@ -18,6 +18,10 @@ curl -fsSL https://raw.githubusercontent.com/if-then-end/if.bar/main/scripts/ins
 It clones this repo into `~/.config/sketchybar`, moving any existing config to
 `~/.config/sketchybar.backup.<timestamp>` first, then starts the bar.
 
+Installing the app icons builds that font from source, which runs the upstream
+project's own `pnpm install` and build script at whatever its default branch
+points to - pass a commit to `scripts/update-app-font.sh` to pin it.
+
 <details>
 <summary>Manual install</summary>
 
