@@ -33,16 +33,12 @@ git clone https://github.com/if-then-end/if.bar ~/.config/sketchybar
 ```
 
 App icons come from
-[sketchybar-app-font](https://github.com/kvndrsslr/sketchybar-app-font). Build
-it, then convert its icon list into the Lua table this config reads:
+[sketchybar-app-font](https://github.com/kvndrsslr/sketchybar-app-font). One
+script builds it and converts its icon list into the Lua table this config
+reads:
 
 ```bash
-git clone https://github.com/kvndrsslr/sketchybar-app-font.git /tmp/app-font
-cd /tmp/app-font && pnpm install && pnpm run build:install
-
-awk -f ~/.config/sketchybar/scripts/icon_map_to_lua.awk dist/icon_map.sh \
-  > ~/.config/sketchybar/lua/icons/apps.lua
-cp dist/sketchybar-app-font.ttf ~/Library/Fonts/ && fc-cache -f
+~/.config/sketchybar/scripts/update-app-font.sh
 
 brew services restart sketchybar
 ```
@@ -141,7 +137,10 @@ session. State lives in `~/.local/state/if.bar/`, created owner-only.
 | Weather is blank    | `curl -s "wttr.in/Seoul?format=j1"`                        |
 | Bar does not start  | `lua ~/.config/sketchybar/sketchybarrc` shows the error    |
 
-Update with `~/.config/sketchybar/scripts/update.sh`.
+Update with `~/.config/sketchybar/scripts/update.sh`. The app icons live in a
+separate font that a pull does not carry, so refresh them with
+`~/.config/sketchybar/scripts/update-app-font.sh` - it reports which apps came
+and went, and answers in about a second when there is nothing to do.
 
 ## Credits
 
