@@ -5,3 +5,7 @@
 *.tmp
 ifbarrc
 user.sketchybarrc
+
+# installed app binaries
+bin/
+settings/
