@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 
-TARGET_DIR="${1:-$HOME/.config/sketchybar}"
-
-if [ -n "${BASH_SOURCE[0]}" ] && [ -f "${BASH_SOURCE[0]}" ]; then
-  SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-  TARGET_DIR="$SCRIPT_DIR"
+if [ -n "$1" ]; then
+  TARGET_DIR="$1"
+elif [ -n "${BASH_SOURCE[0]}" ] && [ -f "${BASH_SOURCE[0]}" ]; then
+  TARGET_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+else
+  TARGET_DIR="$HOME/.config/sketchybar"
 fi
 
 if [ ! -d "$TARGET_DIR" ]; then
@@ -14,8 +15,10 @@ fi
 
 cd "$TARGET_DIR" || exit 1
 
-if [ ! -d ".git" ]; then
-  echo "Error: Not a git repository"
+# rev-parse rather than a check for a .git directory, which a worktree or a
+# submodule keeps as a file.
+if ! git rev-parse --git-dir > /dev/null 2>&1; then
+  echo "Error: Not a git repository: $TARGET_DIR"
   exit 1
 fi
 
