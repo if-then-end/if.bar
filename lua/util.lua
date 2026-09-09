@@ -6,22 +6,22 @@ function M.alpha(color, level)
   return prefix .. rgb
 end
 
-function M.trim(s)
-  return (s:gsub("^%s*(.-)%s*$", "%1"))
+function M.trim(text)
+  return (text:gsub("^%s*(.-)%s*$", "%1"))
 end
 
-function M.is_true(v)
-  return v == true or v == "true"
+function M.is_true(value)
+  return value == true or value == "true"
 end
 
-function M.round(n)
-  return math.floor(n + 0.5)
+function M.round(value)
+  return math.floor(value + 0.5)
 end
 
-function M.clamp(n, lo, hi)
-  if n < lo then return lo end
-  if n > hi then return hi end
-  return n
+function M.clamp(value, low, high)
+  if value < low then return low end
+  if value > high then return high end
+  return value
 end
 
 local DATE_TOKENS = {
@@ -53,16 +53,16 @@ end
 -- meaning, so those stay; everything else is encoded. That covers place names
 -- carrying an apostrophe - N'Djamena, Val-d'Or - which would otherwise close
 -- the quoting of the command the value is interpolated into.
-function M.url_encode(s)
-  return (tostring(s):gsub("[^%w%-%._~%+@,]", function(c)
-    return string.format("%%%02X", string.byte(c))
+function M.url_encode(text)
+  return (tostring(text):gsub("[^%w%-%._~%+@,]", function(char)
+    return string.format("%%%02X", string.byte(char))
   end))
 end
 
 function M.file_exists(path)
-  local f = io.open(path, "r")
-  if f then
-    f:close()
+  local handle = io.open(path, "r")
+  if handle then
+    handle:close()
     return true
   end
   return false

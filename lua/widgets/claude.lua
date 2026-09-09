@@ -45,16 +45,16 @@ local function read_sessions()
   return sessions
 end
 
-return function(cfg, position, spacer)
-  local MAX_SLOTS = cfg.widget.claude_max_sessions
+return function(config, position, spacer)
+  local MAX_SLOTS = config.widget.claude_max_sessions
   local slots = {}
 
   for index = 1, MAX_SLOTS do
-    slots[index] = common.add_icon(cfg, "claude." .. index, position, icons.app("Claude"), {
+    slots[index] = common.add_icon(config, "claude." .. index, position, icons.app("Claude"), {
       drawing = false,
       icon = {
-        font = cfg.font.app_icon .. ":Regular:" .. cfg.font.claude_icon_size,
-        padding_left = index == 1 and cfg.item.icon_padding_left or 2,
+        font = config.font.app_icon .. ":Regular:" .. config.font.claude_icon_size,
+        padding_left = index == 1 and config.item.icon_padding_left or 2,
         padding_right = 2,
       },
     })
@@ -65,7 +65,7 @@ return function(cfg, position, spacer)
   local animating = false
 
   local function base_color(session)
-    return cfg.colors[PALETTE[(session.slot % #PALETTE) + 1]] or cfg.color.default_icon
+    return config.colors[PALETTE[(session.slot % #PALETTE) + 1]] or config.color.default_icon
   end
 
   local function alpha_for(session, pulse)
@@ -168,7 +168,7 @@ return function(cfg, position, spacer)
 
   slots[1]:subscribe("claude_sessions", refresh)
   slots[1]:subscribe({ "routine", "forced", "system_woke" }, refresh)
-  slots[1]:set({ update_freq = cfg.freq.slow, updates = true })
+  slots[1]:set({ update_freq = config.freq.slow, updates = true })
 
   sbar.delay(0.1, refresh)
 end

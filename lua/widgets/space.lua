@@ -7,33 +7,33 @@ local function query_spaces()
     return { 1 }, false
   end
 
-  local ids = {}
+  local space_indexes = {}
   for line in handle:lines() do
-    local id = tonumber(line)
-    if id then
-      ids[#ids + 1] = id
+    local index = tonumber(line)
+    if index then
+      space_indexes[#space_indexes + 1] = index
     end
   end
   handle:close()
 
-  if #ids == 0 then
+  if #space_indexes == 0 then
     return { 1 }, false
   end
-  return ids, true
+  return space_indexes, true
 end
 
-return function(cfg, position)
-  local ids, has_yabai = query_spaces()
-  local app_font = cfg.font.app_icon .. ":Regular:"
+return function(config, position)
+  local space_indexes, has_yabai = query_spaces()
+  local app_font = config.font.app_icon .. ":Regular:"
 
   local function style(item, selected, has_apps)
-    local color = selected and cfg.color.space_border or cfg.colors.COLOR_LIGHT_GRAY
+    local color = selected and config.color.space_border or config.colors.COLOR_LIGHT_GRAY
     item:set({
       icon = {
         padding_left = has_apps and 8 or 4,
         padding_right = has_apps and 8 or 4,
         color = color,
-        font = app_font .. cfg.font.app_icon_size,
+        font = app_font .. config.font.app_icon_size,
       },
       label = { drawing = not has_apps, color = color },
       background = { drawing = false },
@@ -42,8 +42,8 @@ return function(cfg, position)
 
   local state = {}
 
-  local function refresh(sid)
-    local entry = state[sid]
+  local function refresh(space_index)
+    local entry = state[space_index]
     if not entry then
       return
     end
@@ -54,7 +54,7 @@ return function(cfg, position)
     end
 
     sbar.exec(
-      "yabai -m query --windows --space " .. sid .. " 2>/dev/null"
+      "yabai -m query --windows --space " .. space_index .. " 2>/dev/null"
         .. " | jq -r '[.[] | select(.app | test(\"ClaudeMon\") | not)] | .[].app'"
         .. " | sort -u | grep -v '^$'",
       function(result)
@@ -70,53 +70,53 @@ return function(cfg, position)
     )
   end
 
-  for index, sid in ipairs(ids) do
-    common.track("space." .. sid)
-    local item = sbar.add("space", "space." .. sid, {
+  for slot, space_index in ipairs(space_indexes) do
+    common.track("space." .. space_index)
+    local item = sbar.add("space", "space." .. space_index, {
       position = position,
-      associated_space = sid,
+      associated_space = space_index,
       icon = {
         string = "",
-        font = app_font .. cfg.font.app_icon_size,
-        color = cfg.colors.COLOR_WHITE,
-        padding_left = cfg.item.icon_padding_left,
-        padding_right = cfg.item.icon_padding_right,
+        font = app_font .. config.font.app_icon_size,
+        color = config.colors.COLOR_WHITE,
+        padding_left = config.item.icon_padding_left,
+        padding_right = config.item.icon_padding_right,
       },
       label = {
-        string = tostring(sid),
-        color = cfg.colors.COLOR_WHITE,
-        padding_right = cfg.item.label_padding_right,
+        string = tostring(space_index),
+        color = config.colors.COLOR_WHITE,
+        padding_right = config.item.label_padding_right,
       },
-      padding_left = index == 1 and 2 or 4,
-      padding_right = index == #ids and 2 or 4,
+      padding_left = slot == 1 and 2 or 4,
+      padding_right = slot == #space_indexes and 2 or 4,
       background = {
-        corner_radius = cfg.item.bg_corner_radius,
-        height = cfg.item.bg_height,
-        border_width = cfg.item.bg_border_width,
-        border_color = cfg.color.space_border,
+        corner_radius = config.item.bg_corner_radius,
+        height = config.item.bg_height,
+        border_width = config.item.bg_border_width,
+        border_color = config.color.space_border,
         drawing = false,
       },
     })
 
-    state[sid] = { item = item, selected = false, has_apps = false }
+    state[space_index] = { item = item, selected = false, has_apps = false }
 
     item:subscribe("space_change", function(env)
-      local entry = state[sid]
+      local entry = state[space_index]
       entry.selected = env.SELECTED == "true"
       style(entry.item, entry.selected, entry.has_apps)
     end)
 
     item:subscribe({ "front_app_switched", "yabai_window_focus", "system_woke" }, function()
-      refresh(sid)
+      refresh(space_index)
     end)
 
     item:subscribe("mouse.clicked", function()
       if has_yabai then
-        sbar.exec("yabai -m space --focus " .. sid)
+        sbar.exec("yabai -m space --focus " .. space_index)
       end
     end)
 
-    refresh(sid)
+    refresh(space_index)
   end
 
   if has_yabai then

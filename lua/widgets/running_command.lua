@@ -15,27 +15,27 @@ local function truncate(text, limit)
   return text:sub(1, utf8.offset(text, limit + 1) - 1) .. "…"
 end
 
-return function(cfg, position, spacer)
-  local limit = cfg.widget.last_command_max_length
+return function(config, position, spacer)
+  local limit = config.widget.last_command_max_length
 
   local color = {
-    user = cfg.color.running_command,
-    claude = cfg.color.running_command_claude,
+    user = config.color.running_command,
+    claude = config.color.running_command_claude,
   }
 
   local slot = {}
 
   local function build(source)
     local function make_icon()
-      return common.add_icon(cfg, "running_command." .. source .. ".icon", position,
+      return common.add_icon(config, "running_command." .. source .. ".icon", position,
         icons.widget("running"), {
           drawing = false,
-          icon = { font = common.icon_font(cfg, -4), color = color[source] },
+          icon = { font = common.icon_font(config, -4), color = color[source] },
         })
     end
 
     local function make_label()
-      return common.add_label(cfg, "running_command." .. source .. ".label", position, {
+      return common.add_label(config, "running_command." .. source .. ".label", position, {
         drawing = false,
         label = { string = "", color = color[source] },
       })

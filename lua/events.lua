@@ -21,7 +21,7 @@ local function fingerprint(displays)
   return table.concat(parts, ";")
 end
 
-return function(cfg)
+return function(config)
   sbar.add("event", "yabai_window_focus")
   sbar.add("event", "caffeinate_update")
 

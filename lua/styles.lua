@@ -1,3 +1,3 @@
-return function(cfg)
-  require("styles.compact")(cfg)
+return function(config)
+  require("styles.compact")(config)
 end

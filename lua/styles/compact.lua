@@ -17,17 +17,17 @@ local WIDGET_PARTS = {
   running_command = { "icon", "label" },
 }
 
-return function(cfg)
+return function(config)
   local drawn = {}
   for _, position in ipairs({ "left", "center", "right" }) do
-    for _, name in ipairs(cfg.loaded[position] or {}) do
+    for _, name in ipairs(config.loaded[position] or {}) do
       drawn[name] = true
     end
   end
 
   for widget in pairs(drawn) do
     local parts = WIDGET_PARTS[widget]
-    local color = cfg.color[widget]
+    local color = config.color[widget]
     if parts and color then
       local props = {}
       for _, part in ipairs(parts) do
@@ -38,15 +38,15 @@ return function(cfg)
   end
 
   if drawn.kakaotalk then
-    sbar.set("kakaotalk.badge", { label = { color = theme.badge_label_color(cfg.theme) } })
+    sbar.set("kakaotalk.badge", { label = { color = theme.badge_label_color(config.theme) } })
   end
 
   local container = {
     background = {
-      color = cfg.item.compact_bg_color,
-      corner_radius = cfg.item.bg_corner_radius,
-      height = cfg.item.bg_height,
-      border_width = cfg.item.bg_border_width,
+      color = config.item.compact_bg_color,
+      corner_radius = config.item.bg_corner_radius,
+      height = config.item.bg_height,
+      border_width = config.item.bg_border_width,
       drawing = true,
     },
   }
@@ -68,8 +68,8 @@ return function(cfg)
       shared = {}
     end
 
-    for _, group in ipairs(cfg.groups[position] or {}) do
-      if cfg.standalone[group.widget] then
+    for _, group in ipairs(config.groups[position] or {}) do
+      if config.standalone[group.widget] then
         flush()
         sbar.add("bracket", "group_" .. group.widget, group.items, container)
       else

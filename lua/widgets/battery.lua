@@ -1,10 +1,10 @@
 local common = require("widgets.common")
 local icons = require("icons")
 
-return function(cfg, position)
-  local percent = common.add_label(cfg, "battery.percent", position, { update_freq = cfg.freq.fast })
-  local icon = common.add_icon(cfg, "battery.icon", position, "", {
-    icon = { font = common.icon_font(cfg, 4) },
+return function(config, position)
+  local percent = common.add_label(config, "battery.percent", position, { update_freq = config.freq.fast })
+  local icon = common.add_icon(config, "battery.icon", position, "", {
+    icon = { font = common.icon_font(config, 4) },
   })
 
   local function update()

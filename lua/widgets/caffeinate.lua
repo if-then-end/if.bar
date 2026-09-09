@@ -4,11 +4,11 @@ local icons = require("icons")
 local STATE_DIR = '"$HOME/.local/state/if.bar"'
 local PID_FILE = '"$HOME/.local/state/if.bar/caffeinate.pid"'
 
-return function(cfg, position)
-  local icon = common.add_icon(cfg, "caffeinate.icon", position, icons.widget("coffee_on"), {
+return function(config, position)
+  local icon = common.add_icon(config, "caffeinate.icon", position, icons.widget("coffee_on"), {
     icon = {
-      font = common.icon_font(cfg, 3),
-      padding_right = cfg.item.label_padding_right - 2,
+      font = common.icon_font(config, 3),
+      padding_right = config.item.label_padding_right - 2,
     },
   })
 
@@ -16,7 +16,7 @@ return function(cfg, position)
     icon:set({
       icon = {
         string = icons.widget(active and "coffee_off" or "coffee_on"),
-        color = active and cfg.color.caffeinate_on or cfg.color.caffeinate,
+        color = active and config.color.caffeinate_on or config.color.caffeinate,
       },
     })
   end
@@ -32,7 +32,7 @@ return function(cfg, position)
     )
   end
 
-  icon:set({ update_freq = cfg.freq.slow, updates = true })
+  icon:set({ update_freq = config.freq.slow, updates = true })
   icon:subscribe({ "routine", "forced", "caffeinate_update", "system_woke" }, refresh)
 
   icon:subscribe("mouse.clicked", function()

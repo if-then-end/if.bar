@@ -18,9 +18,9 @@ local function format_speed(bytes)
   return math.min(value, 999) .. unit
 end
 
-return function(cfg, position)
-  local show_graph = cfg.widget.netstat_show_graph
-  local show_speed = cfg.widget.netstat_show_speed
+return function(config, position)
+  local show_graph = config.widget.netstat_show_graph
+  local show_speed = config.widget.netstat_show_speed
 
   local function build(direction, glyph)
     local target
@@ -32,8 +32,8 @@ return function(cfg, position)
         position = position,
         width = 42,
         graph = {
-          color = cfg.colors.COLOR_BLACK_25,
-          fill_color = cfg.colors.COLOR_BLACK_25,
+          color = config.colors.COLOR_BLACK_25,
+          fill_color = config.colors.COLOR_BLACK_25,
         },
         background = {
           height = 50,
@@ -42,20 +42,20 @@ return function(cfg, position)
           drawing = true,
         },
         label = {
-          color = cfg.colors.COLOR_BLACK,
-          font = common.label_font(cfg, 8.5),
+          color = config.colors.COLOR_BLACK,
+          font = common.label_font(config, 8.5),
           padding_right = 0,
           padding_left = -24,
           y_offset = 6,
         },
       })
     elseif show_speed then
-      target = common.add_label(cfg, name .. ".label", position, {
+      target = common.add_label(config, name .. ".label", position, {
         label = { padding_left = 0 },
       })
     end
 
-    common.add_icon(cfg, name .. ".icon", position, icons.widget(glyph))
+    common.add_icon(config, name .. ".icon", position, icons.widget(glyph))
     return target
   end
 
@@ -67,7 +67,7 @@ return function(cfg, position)
   end
 
   local driver = down or up
-  driver:set({ update_freq = cfg.freq.fast })
+  driver:set({ update_freq = config.freq.fast })
 
   local busy = false
 
@@ -90,8 +90,8 @@ return function(cfg, position)
       if show_graph then
         down:push({ util.clamp(bytes_in / MAX_SPEED, 0, 1) })
         up:push({ util.clamp(bytes_out / MAX_SPEED, 0, 1) })
-        down:set({ graph = { color = cfg.colors.COLOR_BLACK_50 }, label = format_speed(bytes_in) })
-        up:set({ graph = { color = cfg.colors.COLOR_BLACK_50 }, label = format_speed(bytes_out) })
+        down:set({ graph = { color = config.colors.COLOR_BLACK_50 }, label = format_speed(bytes_in) })
+        up:set({ graph = { color = config.colors.COLOR_BLACK_50 }, label = format_speed(bytes_out) })
       else
         down:set({ label = format_speed(bytes_in) })
         up:set({ label = format_speed(bytes_out) })

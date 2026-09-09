@@ -12,10 +12,10 @@ local function icon_for(volume)
   return "volume_mute"
 end
 
-return function(cfg, position)
-  local label = common.add_label(cfg, "volume.label", position)
-  local icon = common.add_icon(cfg, "volume.icon", position, icons.widget("volume_mute"), {
-    icon = { font = common.icon_font(cfg, 4) },
+return function(config, position)
+  local label = common.add_label(config, "volume.label", position)
+  local icon = common.add_icon(config, "volume.icon", position, icons.widget("volume_mute"), {
+    icon = { font = common.icon_font(config, 4) },
   })
 
   local function render(volume, muted)
@@ -26,7 +26,7 @@ return function(cfg, position)
     end
     icon:set({ icon = icons.widget(icon_for(volume)) })
     label:set({
-      label = { string = volume .. "%", padding_right = cfg.item.label_padding_right },
+      label = { string = volume .. "%", padding_right = config.item.label_padding_right },
     })
   end
 

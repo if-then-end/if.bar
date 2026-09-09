@@ -106,25 +106,25 @@ function M.load()
   migrate(raw)
 
   local theme = theme_loader.load(raw.IF_BAR_THEME)
-  local c = theme.colors
+  local colors = theme.colors
 
   for key, value in pairs(raw) do
-    raw[key] = resolve(value, c)
+    raw[key] = resolve(value, colors)
   end
 
   local label_font = pick(raw, "IF_BAR_LABEL_FONT_FAMILY", "SpaceMono Nerd Font Mono")
   local icon_font = pick(raw, "IF_BAR_ICON_FONT_FAMILY", label_font)
   local bar_background = pick(raw, "IF_BAR_BACKGROUND", "transparent")
 
-  local cfg = {
+  local config = {
     theme = theme,
-    colors = c,
+    colors = colors,
 
     bar = {
       height = number(raw, "IF_BAR_HEIGHT", 56),
       position = pick(raw, "IF_BAR_POSITION", "top"),
       background = bar_background,
-      color = bar_background == "bg1" and c.COLOR_BG1 or c.COLOR_TRANSPARENT,
+      color = bar_background == "bg1" and colors.COLOR_BG1 or colors.COLOR_TRANSPARENT,
     },
 
     font = {
@@ -155,7 +155,7 @@ function M.load()
       label_padding_right = 8,
       spacer_width = number(raw, "IF_BAR_SPACER_WIDTH", 8),
       group_gap = number(raw, "IF_BAR_GROUP_GAP", 20),
-      compact_bg_color = pick(raw, "IF_BAR_COMPACT_BG_COLOR", c.COLOR_BG2),
+      compact_bg_color = pick(raw, "IF_BAR_COMPACT_BG_COLOR", colors.COLOR_BG2),
     },
 
     popup = {
@@ -172,28 +172,28 @@ function M.load()
     },
 
     color = {
-      default_icon = pick(raw, "IF_BAR_DEFAULT_ICON_COLOR", c.COLOR_WHITE),
-      default_label = pick(raw, "IF_BAR_DEFAULT_LABEL_COLOR", c.COLOR_WHITE),
-      clock = pick(raw, "IF_BAR_COLOR_CLOCK", c.COLOR_YELLOW),
-      calendar = pick(raw, "IF_BAR_COLOR_CALENDAR", c.COLOR_TANGERINE),
-      weather = pick(raw, "IF_BAR_COLOR_WEATHER", c.COLOR_CYAN),
-      caffeinate = pick(raw, "IF_BAR_COLOR_CAFFEINATE", c.COLOR_GREEN),
-      caffeinate_on = pick(raw, "IF_BAR_COLOR_CAFFEINATE_ON", c.COLOR_RED),
-      volume = pick(raw, "IF_BAR_COLOR_VOLUME", c.COLOR_BLUE),
-      battery = pick(raw, "IF_BAR_COLOR_BATTERY", c.COLOR_ORANGE),
-      disk = pick(raw, "IF_BAR_COLOR_DISK", c.COLOR_RED),
-      ram = pick(raw, "IF_BAR_COLOR_RAM", c.COLOR_MAGENTA),
-      cpu = pick(raw, "IF_BAR_COLOR_CPU", c.COLOR_BLUE),
-      netstat = pick(raw, "IF_BAR_COLOR_NETSTAT", c.COLOR_TANGERINE),
-      kakaotalk = pick(raw, "IF_BAR_COLOR_KAKAOTALK", c.COLOR_YELLOW),
-      front_app = pick(raw, "IF_BAR_COLOR_FRONT_APP", c.COLOR_GREEN),
+      default_icon = pick(raw, "IF_BAR_DEFAULT_ICON_COLOR", colors.COLOR_WHITE),
+      default_label = pick(raw, "IF_BAR_DEFAULT_LABEL_COLOR", colors.COLOR_WHITE),
+      clock = pick(raw, "IF_BAR_COLOR_CLOCK", colors.COLOR_YELLOW),
+      calendar = pick(raw, "IF_BAR_COLOR_CALENDAR", colors.COLOR_TANGERINE),
+      weather = pick(raw, "IF_BAR_COLOR_WEATHER", colors.COLOR_CYAN),
+      caffeinate = pick(raw, "IF_BAR_COLOR_CAFFEINATE", colors.COLOR_GREEN),
+      caffeinate_on = pick(raw, "IF_BAR_COLOR_CAFFEINATE_ON", colors.COLOR_RED),
+      volume = pick(raw, "IF_BAR_COLOR_VOLUME", colors.COLOR_BLUE),
+      battery = pick(raw, "IF_BAR_COLOR_BATTERY", colors.COLOR_ORANGE),
+      disk = pick(raw, "IF_BAR_COLOR_DISK", colors.COLOR_RED),
+      ram = pick(raw, "IF_BAR_COLOR_RAM", colors.COLOR_MAGENTA),
+      cpu = pick(raw, "IF_BAR_COLOR_CPU", colors.COLOR_BLUE),
+      netstat = pick(raw, "IF_BAR_COLOR_NETSTAT", colors.COLOR_TANGERINE),
+      kakaotalk = pick(raw, "IF_BAR_COLOR_KAKAOTALK", colors.COLOR_YELLOW),
+      front_app = pick(raw, "IF_BAR_COLOR_FRONT_APP", colors.COLOR_GREEN),
       space = pick(raw, "IF_BAR_COLOR_SPACE", "0xFF24242f"),
-      space_border = pick(raw, "IF_BAR_COLOR_SPACE_BORDER", c.COLOR_GREEN),
-      last_command = pick(raw, "IF_BAR_COLOR_LAST_COMMAND", c.COLOR_CYAN),
-      last_command_error = pick(raw, "IF_BAR_COLOR_LAST_COMMAND_ERROR", c.COLOR_RED),
-      last_command_claude = pick(raw, "IF_BAR_COLOR_LAST_COMMAND_CLAUDE", c.COLOR_MAGENTA),
-      running_command = pick(raw, "IF_BAR_COLOR_RUNNING_COMMAND", c.COLOR_YELLOW),
-      running_command_claude = pick(raw, "IF_BAR_COLOR_RUNNING_COMMAND_CLAUDE", c.COLOR_MAGENTA),
+      space_border = pick(raw, "IF_BAR_COLOR_SPACE_BORDER", colors.COLOR_GREEN),
+      last_command = pick(raw, "IF_BAR_COLOR_LAST_COMMAND", colors.COLOR_CYAN),
+      last_command_error = pick(raw, "IF_BAR_COLOR_LAST_COMMAND_ERROR", colors.COLOR_RED),
+      last_command_claude = pick(raw, "IF_BAR_COLOR_LAST_COMMAND_CLAUDE", colors.COLOR_MAGENTA),
+      running_command = pick(raw, "IF_BAR_COLOR_RUNNING_COMMAND", colors.COLOR_YELLOW),
+      running_command_claude = pick(raw, "IF_BAR_COLOR_RUNNING_COMMAND_CLAUDE", colors.COLOR_MAGENTA),
     },
 
     widget = {
@@ -216,18 +216,18 @@ function M.load()
   local center = raw.IF_BAR_WIDGETS_CENTER_ENABLED
   local right = raw.IF_BAR_WIDGETS_RIGHT_ENABLED
 
-  cfg.widgets = {
+  config.widgets = {
     left = left and split(left) or { "space" },
     center = center and split(center) or { "front_app" },
     right = right and split(right)
       or { "clock", "weather", "caffeinate", "volume", "battery", "disk", "ram", "cpu", "kakaotalk" },
   }
 
-  cfg.standalone = { space = true, claude = true, running_command = true }
+  config.standalone = { space = true, claude = true, running_command = true }
 
-  cfg.auto_insert_spacer = true
+  config.auto_insert_spacer = true
 
-  return cfg
+  return config
 end
 
 return M

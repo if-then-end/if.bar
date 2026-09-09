@@ -2,21 +2,21 @@ local common = require("widgets.common")
 local icons = require("icons")
 local util = require("util")
 
-return function(cfg, position)
-  local label = common.add_label(cfg, "weather.label", position, {
+return function(config, position)
+  local label = common.add_label(config, "weather.label", position, {
     update_freq = 600,
     updates = true,
     label = { string = icons.widget("loading") },
   })
 
-  local icon = common.add_icon(cfg, "weather.icon", position, "", {
+  local icon = common.add_icon(config, "weather.icon", position, "", {
     icon = {
-      font = common.icon_font(cfg, 12.5),
-      padding_left = cfg.item.icon_padding_left - 4.0,
+      font = common.icon_font(config, 12.5),
+      padding_left = config.item.icon_padding_left - 4.0,
     },
   })
 
-  local url = "wttr.in/" .. util.url_encode(cfg.widget.weather_location) .. "?format=j1"
+  local url = "wttr.in/" .. util.url_encode(config.widget.weather_location) .. "?format=j1"
   local query = "curl -s '" .. url .. "' | jq -r '"
     .. "[.current_condition[0].temp_C, .current_condition[0].weatherCode,"
     .. " .weather[0].astronomy[0].sunrise, .weather[0].astronomy[0].sunset] | @tsv'"

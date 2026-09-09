@@ -1,19 +1,19 @@
 local common = require("widgets.common")
 local icons = require("icons")
 
-return function(cfg, position)
+return function(config, position)
   local target
   local busy = false
 
-  if cfg.widget.cpu_show_graph then
+  if config.widget.cpu_show_graph then
     common.track("cpu.graph")
     target = sbar.add("graph", "cpu.graph", 42, {
       position = position,
       width = 42,
-      update_freq = cfg.freq.fast,
+      update_freq = config.freq.fast,
       graph = {
-        color = cfg.colors.COLOR_BLUE_75,
-        fill_color = cfg.colors.COLOR_BLACK_25,
+        color = config.colors.COLOR_BLUE_75,
+        fill_color = config.colors.COLOR_BLACK_25,
       },
       background = {
         height = 22,
@@ -22,22 +22,22 @@ return function(cfg, position)
         drawing = true,
       },
       label = {
-        color = cfg.colors.COLOR_BLACK,
-        font = common.label_font(cfg, 8.5),
+        color = config.colors.COLOR_BLACK,
+        font = common.label_font(config, 8.5),
         padding_right = 0,
         padding_left = -20,
         y_offset = 6,
       },
     })
-  elseif cfg.widget.cpu_show_percent then
-    target = common.add_label(cfg, "cpu.percent", position, {
-      update_freq = cfg.freq.fast,
+  elseif config.widget.cpu_show_percent then
+    target = common.add_label(config, "cpu.percent", position, {
+      update_freq = config.freq.fast,
       label = { padding_left = 0 },
     })
   end
 
-  common.add_icon(cfg, "cpu.icon", position, icons.widget("cpu"), {
-    icon = { font = common.icon_font(cfg, 4) },
+  common.add_icon(config, "cpu.icon", position, icons.widget("cpu"), {
+    icon = { font = common.icon_font(config, 4) },
   })
 
   if not target then
@@ -56,7 +56,7 @@ return function(cfg, position)
         return
       end
       local load = math.floor(tonumber(user) + tonumber(sys))
-      if cfg.widget.cpu_show_graph then
+      if config.widget.cpu_show_graph then
         target:push({ load / 100 })
       end
       target:set({ label = load .. "%" })

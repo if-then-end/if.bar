@@ -11,31 +11,31 @@ local function truncate(text, limit)
   return text:sub(1, utf8.offset(text, limit + 1) - 1) .. "…"
 end
 
-return function(cfg, position)
-  local limit = cfg.widget.last_command_max_length
+return function(config, position)
+  local limit = config.widget.last_command_max_length
 
   local function make_icon()
-    return common.add_icon(cfg, "last_command.icon", position, icons.app("Terminal"), {
+    return common.add_icon(config, "last_command.icon", position, icons.app("Terminal"), {
       icon = {
-        font = cfg.font.app_icon .. ":Regular:" .. cfg.font.app_icon_size,
-        color = cfg.color.last_command,
-        padding_right = cfg.item.icon_padding_right,
+        font = config.font.app_icon .. ":Regular:" .. config.font.app_icon_size,
+        color = config.color.last_command,
+        padding_right = config.item.icon_padding_right,
       },
     })
   end
 
   local function make_label()
-    return common.add_label(cfg, "last_command.label", position, {
+    return common.add_label(config, "last_command.label", position, {
       label = { string = "", padding_right = 4 },
     })
   end
 
   local function make_state()
-    return common.add_icon(cfg, "last_command.state", position, FAIL_GLYPH, {
+    return common.add_icon(config, "last_command.state", position, FAIL_GLYPH, {
       icon = {
-        font = common.icon_font(cfg, -6),
+        font = common.icon_font(config, -6),
         padding_left = 0,
-        padding_right = cfg.item.label_padding_right,
+        padding_right = config.item.label_padding_right,
       },
     })
   end
@@ -57,11 +57,11 @@ return function(cfg, position)
       return
     end
 
-    local color = cfg.color.last_command
+    local color = config.color.last_command
     if status == "fail" then
-      color = cfg.color.last_command_error
+      color = config.color.last_command_error
     elseif status == "claude" then
-      color = cfg.color.last_command_claude
+      color = config.color.last_command_claude
     end
 
     local failed = status == "fail"
@@ -72,7 +72,7 @@ return function(cfg, position)
       label = {
         string = truncate(command, limit),
         color = color,
-        padding_right = failed and 4 or cfg.item.label_padding_right,
+        padding_right = failed and 4 or config.item.label_padding_right,
       },
     })
     state:set({

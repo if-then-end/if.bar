@@ -2,19 +2,19 @@ local common = require("widgets.common")
 local icons = require("icons")
 local theme = require("theme")
 
-return function(cfg, position)
+return function(config, position)
   common.track("kakaotalk.badge")
   local badge = sbar.add("item", "kakaotalk.badge", {
     position = position,
     label = {
       drawing = false,
-      font = cfg.font.label_bold .. ":7.0",
+      font = config.font.label_bold .. ":7.0",
       color = "0xFFFFFFFF",
       padding_left = 4,
       padding_right = 4,
     },
     background = {
-      color = cfg.colors.COLOR_RED,
+      color = config.colors.COLOR_RED,
       corner_radius = 7,
       height = 14,
       drawing = false,
@@ -22,12 +22,12 @@ return function(cfg, position)
     y_offset = -10,
   })
 
-  local icon = common.add_icon(cfg, "kakaotalk.icon", position, icons.app("KakaoTalk"), {
+  local icon = common.add_icon(config, "kakaotalk.icon", position, icons.app("KakaoTalk"), {
     update_freq = 10,
-    icon = { font = cfg.font.app_icon .. ":Regular:" .. cfg.font.app_icon_size },
+    icon = { font = config.font.app_icon .. ":Regular:" .. config.font.app_icon_size },
   })
 
-  badge:set({ label = { color = theme.badge_label_color(cfg.theme) } })
+  badge:set({ label = { color = theme.badge_label_color(config.theme) } })
 
   local function update()
     sbar.exec("pgrep -x KakaoTalk >/dev/null && echo running || echo stopped", function(state)

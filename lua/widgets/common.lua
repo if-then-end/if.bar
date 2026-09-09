@@ -17,26 +17,26 @@ function M.collect()
   return out
 end
 
-function M.icon_font(cfg, delta)
-  return cfg.font.icon_bold .. ":" .. (cfg.font.icon_size + (delta or 0))
+function M.icon_font(config, delta)
+  return config.font.icon_bold .. ":" .. (config.font.icon_size + (delta or 0))
 end
 
-function M.label_font(cfg, size)
-  return cfg.font.label_regular .. ":" .. size
+function M.label_font(config, size)
+  return config.font.label_regular .. ":" .. size
 end
 
-function M.add_label(cfg, name, position, props)
+function M.add_label(config, name, position, props)
   local base = {
     position = position,
     label = {
-      color = cfg.colors.COLOR_BLACK,
-      padding_right = cfg.item.label_padding_right,
+      color = config.colors.COLOR_BLACK,
+      padding_right = config.item.label_padding_right,
     },
   }
   for key, value in pairs(props or {}) do
     if key == "label" then
-      for k, v in pairs(value) do
-        base.label[k] = v
+      for field, setting in pairs(value) do
+        base.label[field] = setting
       end
     else
       base[key] = value
@@ -46,21 +46,21 @@ function M.add_label(cfg, name, position, props)
   return sbar.add("item", name, base)
 end
 
-function M.add_icon(cfg, name, position, glyph, props)
+function M.add_icon(config, name, position, glyph, props)
   local base = {
     position = position,
     icon = {
       string = glyph,
-      font = M.icon_font(cfg),
-      color = cfg.colors.COLOR_BLACK,
-      padding_left = cfg.item.icon_padding_left,
-      padding_right = cfg.item.icon_padding_right,
+      font = M.icon_font(config),
+      color = config.colors.COLOR_BLACK,
+      padding_left = config.item.icon_padding_left,
+      padding_right = config.item.icon_padding_right,
     },
   }
   for key, value in pairs(props or {}) do
     if key == "icon" then
-      for k, v in pairs(value) do
-        base.icon[k] = v
+      for field, setting in pairs(value) do
+        base.icon[field] = setting
       end
     else
       base[key] = value

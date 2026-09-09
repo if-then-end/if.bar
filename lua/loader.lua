@@ -12,7 +12,7 @@ local function add_spacer(position, width)
   return { name = name, width = width }
 end
 
-local function load_group(cfg, names, position)
+local function load_group(config, names, position)
   local pending = {}
 
   for _, entry in ipairs(names) do
@@ -28,14 +28,14 @@ local function load_group(cfg, names, position)
   local spacer
 
   for _, entry in ipairs(pending) do
-    if #groups > 0 and cfg.auto_insert_spacer then
+    if #groups > 0 and config.auto_insert_spacer then
       local previous = groups[#groups].widget
-      local boundary = cfg.standalone[previous] or cfg.standalone[entry.name]
-      spacer = add_spacer(position, boundary and cfg.item.group_gap or cfg.item.spacer_width)
+      local boundary = config.standalone[previous] or config.standalone[entry.name]
+      spacer = add_spacer(position, boundary and config.item.group_gap or config.item.spacer_width)
     end
 
     common.reset()
-    local ok, drawn = pcall(entry.draw, cfg, position, spacer)
+    local ok, drawn = pcall(entry.draw, config, position, spacer)
     local created = common.collect()
 
     if not ok then
@@ -55,18 +55,18 @@ local function load_group(cfg, names, position)
   return groups
 end
 
-return function(cfg)
-  cfg.groups = {}
-  cfg.loaded = {}
+return function(config)
+  config.groups = {}
+  config.loaded = {}
 
   for _, position in ipairs({ "left", "center", "right" }) do
-    local groups = load_group(cfg, cfg.widgets[position], position)
-    cfg.groups[position] = groups
+    local groups = load_group(config, config.widgets[position], position)
+    config.groups[position] = groups
 
     local widgets = {}
     for _, group in ipairs(groups) do
       widgets[#widgets + 1] = group.widget
     end
-    cfg.loaded[position] = widgets
+    config.loaded[position] = widgets
   end
 end
