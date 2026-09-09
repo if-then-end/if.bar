@@ -1,8 +1,9 @@
 # ifbar
 
 A CLI for the parts of this repo that were shell scripts. Only `doctor` has
-moved so far; the scripts under `scripts/` still work and are what the README
-points people at, since there is no released binary yet.
+moved so far, and it is the only copy - the shell version is gone, so there is
+one place to change a check. That costs a Go toolchain to build it, until there
+is a released binary.
 
 ```bash
 cd cli && go build -o ../bin/ifbar .

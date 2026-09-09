@@ -30,8 +30,15 @@ aside first, then starts the bar.
 widget needs it.
 
 Update with `scripts/update.sh`. App icons come from a separate font that a pull
-does not carry, so refresh those with `scripts/update-app-font.sh`. When
-something looks wrong, `scripts/doctor.sh` reports what is missing or broken.
+does not carry, so refresh those with `scripts/update-app-font.sh`.
+
+When something looks wrong, `ifbar doctor` reports what is missing or broken.
+It needs building once, and Go is the only thing it needs:
+
+```bash
+cd ~/.config/sketchybar/cli && go build -o ../bin/ifbar .
+~/.config/sketchybar/bin/ifbar doctor
+```
 
 <details>
 <summary>Manual install</summary>
