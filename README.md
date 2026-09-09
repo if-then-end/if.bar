@@ -30,7 +30,8 @@ aside first, then starts the bar.
 widget needs it.
 
 Update with `scripts/update.sh`. App icons come from a separate font that a pull
-does not carry, so refresh those with `scripts/update-app-font.sh`.
+does not carry, so refresh those with `scripts/update-app-font.sh`. When
+something looks wrong, `scripts/doctor.sh` reports what is missing or broken.
 
 <details>
 <summary>Manual install</summary>
