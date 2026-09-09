@@ -1,14 +1,14 @@
 # if.bar
 
+![if.bar](demo.png)
+
+The empty middle is cut out; the bar spans the whole display width.
+
 A Lua configuration for [sketchybar](https://github.com/FelixKratz/SketchyBar):
 app icons, system status, weather, the command your shell is running, and one
 indicator per live Claude Code session. It runs as a single resident Lua process
 talking to sketchybar over kernel IPC, so widgets update through event callbacks
 rather than by forking a shell.
-
-![if.bar](demo.png)
-
-The empty middle is cut out; the bar spans the whole display width.
 
 ## Install
 
@@ -25,6 +25,9 @@ to pin it.
 
 [yabai](https://github.com/koekeishiya/yabai) is optional, and only the `space`
 widget needs it.
+
+Update with `scripts/update.sh`. App icons come from a separate font that a pull
+does not carry, so refresh those with `scripts/update-app-font.sh`.
 
 <details>
 <summary>Manual install</summary>
@@ -65,7 +68,7 @@ export IF_BAR_WIDGETS_RIGHT_ENABLED="clock weather caffeinate volume battery dis
 
 `space` (yabai spaces with app icons) · `front_app` · `clock` · `calendar` ·
 `weather` · `battery` · `disk` · `ram` · `cpu` · `netstat` · `volume` ·
-`caffeinate` · `kakaotalk` · `last_command` · `running_command` · `claude`
+`caffeinate` · `last_command` · `running_command` · `claude`
 
 Eleven themes ship with it, `onedark` by default:
 
@@ -73,7 +76,9 @@ Eleven themes ship with it, `onedark` by default:
 export IF_BAR_THEME="nord"
 ```
 
-## Shell integration
+## Integration
+
+### Shell
 
 `last_command` and `running_command` need a zsh hook. The shell reports the
 command, so any terminal emulator works.
@@ -89,7 +94,7 @@ echo 'source "$ZDOTDIR/functions/sketchybar.zsh"' >> "$ZDOTDIR/.zshrc"
 > through is visible to screen shares and screenshots. Leave both widgets out if
 > that is not a trade you want.
 
-## Claude Code integration
+### Claude Code
 
 ```bash
 ln -sf ~/.config/sketchybar/hooks/claude-sessions.py \
@@ -108,18 +113,6 @@ Each session gets a color, dimmed when idle, pulsing while Claude works, and
 bright and steady when it is blocked on your answer. Both hooks swallow every
 error and exit 0, so a broken bar cannot disturb a session, and the session ids
 they track live in `~/.local/state/if.bar/`, created owner-only.
-
-## Troubleshooting
-
-| Symptom             | Check                                                      |
-| ------------------- | ---------------------------------------------------------- |
-| Icons show as boxes | `fc-list \| grep -i "space mono"`, then restart sketchybar |
-| Spaces are empty    | `yabai -m query --spaces` — the widget needs yabai running |
-| Weather is blank    | `curl -s "wttr.in/Seoul?format=j1"`                        |
-| Bar does not start  | `lua ~/.config/sketchybar/sketchybarrc` shows the error    |
-
-Update with `scripts/update.sh`. App icons come from a separate font that a pull
-does not carry, so refresh those with `scripts/update-app-font.sh`.
 
 ## Credits
 
