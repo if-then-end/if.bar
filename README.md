@@ -19,9 +19,12 @@ curl -fsSL https://raw.githubusercontent.com/if-then-end/if.bar/main/scripts/ins
 ```
 
 It clones this repo into `~/.config/sketchybar`, moving any existing config
-aside first, then starts the bar. Building the app icon font runs the upstream
-project's own install and build - pass a commit to `scripts/update-app-font.sh`
-to pin it.
+aside first, then starts the bar.
+
+> [!NOTE]
+> Building the app icon font runs the upstream project's own install and build,
+> at whatever its default branch points to. Pass a commit to
+> `scripts/update-app-font.sh` to pin it.
 
 [yabai](https://github.com/koekeishiya/yabai) is optional, and only the `space`
 widget needs it.
