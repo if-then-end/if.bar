@@ -30,14 +30,26 @@ return function(cfg)
     drawing = false,
   })
 
-  sbar.add("event", "system_woke")
-  system:subscribe("system_woke", function()
-    sbar.exec("sketchybar --reload")
-  end)
-
   local layout
   local probing = false
   local reloading = false
+
+  -- A wake arrives as two system_woke events half a second apart, each of them
+  -- carrying a display change, so reloading on the spot rebuilt the bar three
+  -- times over. One delayed reload absorbs the burst, and waiting also lets the
+  -- displays and the spaces settle before the widgets are rebuilt from them.
+  local function reload_once()
+    if reloading then
+      return
+    end
+    reloading = true
+    sbar.exec("sleep " .. RELOAD_DELAY .. "; sketchybar --reload", function()
+      reloading = false
+    end)
+  end
+
+  sbar.add("event", "system_woke")
+  system:subscribe("system_woke", reload_once)
 
   local function probe(handler)
     probing = true
@@ -66,10 +78,7 @@ return function(cfg)
       end
 
       layout = current
-      reloading = true
-      sbar.exec("sleep " .. RELOAD_DELAY .. "; sketchybar --reload", function()
-        reloading = false
-      end)
+      reload_once()
     end)
   end)
 end
