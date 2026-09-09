@@ -55,8 +55,8 @@ cd ~/.config/sketchybar && cp ifbarrc.example ifbarrc
 ```
 
 Every setting is listed and commented there. The file is parsed rather than
-executed, so only `export NAME=value` lines count. Reload with
-`sketchybar --reload`.
+executed: `NAME=value` lines count, with or without `export`, and nothing else
+in it runs. Reload with `sketchybar --reload`.
 
 Widgets are three space-separated lists, in display order:
 

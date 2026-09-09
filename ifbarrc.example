@@ -5,7 +5,8 @@
 #   cp ifbarrc.example ifbarrc
 #
 # Anything left commented out falls back to the defaults in lua/config.lua.
-# The file is parsed, not executed, so only "export NAME=value" lines count.
+# The file is parsed, not executed: NAME=value lines count, with or without
+# export, and nothing else in it runs.
 # $COLOR_* names are resolved against the active theme: every base color has
 # COLOR_<NAME> plus COLOR_<NAME>_75, _50 and _25 alpha variants. A name the
 # theme does not define resolves to nothing, which leaves the widget colorless.
@@ -30,7 +31,7 @@
 # The session icons can carry their own size. A glyph that is wide and flat
 # fills less of its box vertically than a squarer one, so it reads smaller at
 # the same point size. Defaults to IF_BAR_APP_ICON_FONT_SIZE.
-# IF_BAR_CLAUDE_ICON_SIZE=18.0
+# export IF_BAR_CLAUDE_ICON_SIZE=18.0
 
 # ========== Widgets ==========
 # Space-separated lists, in display order.
