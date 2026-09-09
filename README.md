@@ -6,6 +6,10 @@ indicator per live Claude Code session. It runs as a single resident Lua process
 talking to sketchybar over kernel IPC, so widgets update through event callbacks
 rather than by forking a shell.
 
+![if.bar](demo.png)
+
+The empty middle is cut out; the bar spans the whole display width.
+
 ## Install
 
 Needs macOS and [Homebrew](https://brew.sh); the script pulls everything else.
