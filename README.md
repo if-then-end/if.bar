@@ -1,6 +1,6 @@
 # if.bar
 
-![if.bar](demo.png)
+![if.bar](docs/demo.png)
 
 The empty middle is cut out; the bar spans the whole display width.
 
