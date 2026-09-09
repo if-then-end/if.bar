@@ -88,9 +88,10 @@ ln -sf ~/.config/sketchybar/hooks/zsh-integration.zsh "$ZDOTDIR/functions/sketch
 echo 'source "$ZDOTDIR/functions/sketchybar.zsh"' >> "$ZDOTDIR/.zshrc"
 ```
 
-> **These widgets put your commands on screen.** The hook masks what looks like
-> a secret - `password`, `token`, `bearer`, credentials in a URL and similar -
-> but it matches on keywords and is best effort, not a guarantee. Whatever gets
+> [!CAUTION]
+> These widgets put your commands on screen. The hook masks what looks like a
+> secret - `password`, `token`, `bearer`, credentials in a URL and similar - but
+> it matches on keywords and is best effort, not a guarantee. Whatever gets
 > through is visible to screen shares and screenshots. Leave both widgets out if
 > that is not a trade you want.
 
