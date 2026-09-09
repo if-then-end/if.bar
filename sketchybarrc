@@ -13,13 +13,19 @@ local function own_pid()
   return nil
 end
 
+-- Only lower pids, never every other process: two configs starting at once
+-- each saw the other in its own pgrep snapshot and killed it, leaving the bar
+-- with no config process at all. A wake does start several at once, because
+-- sketchybar posts system_woke twice and a display change with it. Comparing
+-- pids is a strict order, so no two can kill each other and the newest - the
+-- one that read the config last - is the one that survives.
 local function stop_others(self_pid)
   if not self_pid then
     return
   end
   os.execute(
     "for p in $(pgrep -f '[l]ua .*/sketchybarrc' 2>/dev/null); do "
-      .. '[ "$p" != "' .. self_pid .. '" ] && kill "$p" 2>/dev/null; '
+      .. '[ "$p" -lt "' .. self_pid .. '" ] && kill "$p" 2>/dev/null; '
       .. "done"
   )
 end
